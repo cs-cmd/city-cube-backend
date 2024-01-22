@@ -4,4 +4,4 @@ This repository is all server-side code for the fictional [CityCube restaurant](
 
 The backend provides a menu, sign-in functionality, order placement, and account management.
 
-Built with [Express](https://expressjs.com/).
+Built with [Express](https://expressjs.com/) and [Turso](https://turso.tech).
