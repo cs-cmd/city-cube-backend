@@ -6,6 +6,7 @@ import express from "express";
 import { createClient } from "@libsql/client";
 import cors from "cors";
 import menuItemsRouter from "./routers/menu-router.js";
+const __dirname = new URL(".", import.meta.url).pathname;
 
 const app = express();
 const port = process.env.SERVER_PORT || 3000;
@@ -20,9 +21,12 @@ const client = createClient({
   authToken: process.env.TURSO_DB_API_TOKEN,
 });
 
+console.log(app.address);
+
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.send("CityCube Server :: /menu-search");
 });
+
 app.use("/menu-search", menuItemsRouter);
 
 app.listen(port, () => {
