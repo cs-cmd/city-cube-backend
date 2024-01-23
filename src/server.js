@@ -17,7 +17,7 @@ const corsOptions = {
 
 const client = createClient({
   url: process.env.LIBSQL_CONN,
-  authToken: process.env.TURSO_API_TOKEN,
+  authToken: process.env.TURSO_DB_API_TOKEN,
 });
 
 app.get("/", (req, res) => {
