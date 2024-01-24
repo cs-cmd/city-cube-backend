@@ -12,6 +12,11 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "imports": {
+    "#controllers/*.js": "./src/controller/*.js",
+    "#api/*.js": "./src/routers/api/*.js",
+    "#routers/*.js": "./src/routers/*.js"
+  },
   "dependencies": {
     "@libsql/client": "^0.4.0-pre.7",
     "cors": "^2.8.5",
