@@ -5,7 +5,7 @@
 import express from "express";
 import { createClient } from "@libsql/client";
 import cors from "cors";
-import menuItemsRouter from "./routers/menu-router.js";
+import menuItemsRouter from "./routers/MenuRouter.js";
 const __dirname = new URL(".", import.meta.url).pathname;
 
 const app = express();
