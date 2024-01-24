@@ -19,16 +19,17 @@
             
             <div class="input-field">
                <label class="form-label">Username</label>
-               <input type="text" name="user_username" class="form-input" placeholder="Username"/>
+               <input type="text" name="email" class="form-input" placeholder="Username"/>
             </div>
 
             <div class="input-field">
                 <label class="form-label">Password</label>
-                <input type="password" name="user_password" class="form-input" placeholder="Password"/>
+                <input type="password" name="password" class="form-input" placeholder="Password"/>
             </div>
 
-            <div class="input-field">
+            <div class="input-field status">
                 <input type="submit" value="Log in" class="page-button regular"/>
+                <p class='centered-text warning-text'><%= locals.error_message %></p>
             </div>
         </form>
     </main>

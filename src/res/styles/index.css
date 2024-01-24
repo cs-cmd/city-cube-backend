@@ -13,7 +13,7 @@
 
   --warning-color: lch(55% 108 28);
 
-  --border-radius: 25px;
+  --border-radius: 15px;
 
   --quick-time: 0.25s;
   --med-time: 0.5s;
@@ -114,8 +114,9 @@ a {
 
 .login-form {
   width: clamp(300px, 50%, 750px);
-  border: 1px solid var(--header-font-color);
-  display: flex; 
+  border: 2px solid var(--header-font-color);
+  border-radius: var(--border-radius);
+  display: flex;
   flex-direction: column;
   gap: 30px;
   padding: 15px;
@@ -125,6 +126,15 @@ a {
   position: relative;
   display: flex;
   justify-content: center;
+  &.status {
+    flex-direction: column;
+  }
+}
+
+.input-field.status {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .form-label {
@@ -135,12 +145,14 @@ a {
 
 .form-input {
   width: max(50%, 200px);
-  border: 1px solid var(--header-font-color);
-  border-radius: 3px;
+  border: 2px solid var(--header-font-color);
+  border-radius: var(--border-radius);
   font-size: 2ch;
   background-color: var(--main-background);
+  padding: 0px 10px;
   color: var(--text-color);
-  transition: color var(--quick-time),
+  transition:
+    color var(--quick-time),
     background-color var(--quick-time);
   &:focus {
     color: var(--main-background);
@@ -151,9 +163,9 @@ a {
 .warning-text {
   color: var(--warning-color);
   &::before {
-    content: '>>> '
+    content: ">>> ";
   }
   &::after {
-    content: ' <<<'
-  } 
+    content: " <<<";
+  }
 }
