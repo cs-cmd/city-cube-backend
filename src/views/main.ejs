@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CityCube Admin</title>
+    <link rel="stylesheet" href="styles/index.css" type="text/css"/>
+</head>
+<body>
+    <header>
+        <h1 class="centered-text">CityCube Administration</h1>
+        <p class="centered-text">Welcome to the CityCube Administration page!</p>
+        <p class="centered-text warning-text">UNAUTHORIZED USE OF THIS PRODUCT WILL RESULT IN LEGAL ACTION</p>
+    </header>
+
+    <main class="main-section">
+        <form class="login-form" method="POST" action="/admin/login">
+            <p class="centered-text">Please log in</p>
+            
+            <div class="input-field">
+               <label class="form-label">Username</label>
+               <input type="text" name="user_username" class="form-input" placeholder="Username"/>
+            </div>
+
+            <div class="input-field">
+                <label class="form-label">Password</label>
+                <input type="password" name="user_password" class="form-input" placeholder="Password"/>
+            </div>
+
+            <div class="input-field">
+                <input type="submit" value="Log in" class="page-button regular"/>
+            </div>
+        </form>
+    </main>
+</body>
+</html>

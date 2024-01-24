@@ -4,30 +4,39 @@
 // gather data from
 import express from "express";
 import { createClient } from "@libsql/client";
-import cors from "cors";
-import menuItemsRouter from "./routers/MenuRouter.js";
-const __dirname = new URL(".", import.meta.url).pathname;
+import menuItemsRouter from "./routers/api/MenuRouter.js";
+import adminRouter from './routers/AdminRouter.js';
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path'
+import { config } from "dotenv";
+config();
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const app = express();
+app.set('view engine', 'ejs');
+app.set('views', resolve(__dirname, 'views'));
+app.use(express.static(__dirname + '/res'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true}));
+
 const port = process.env.SERVER_PORT || 3000;
-// const whitelist = ['http://localhost:5000'];
-const corsOptions = {
-  origin: "http://localhost:5000",
-  optionsSuccessStatus: 200,
-};
 
 const client = createClient({
   url: process.env.LIBSQL_CONN,
   authToken: process.env.TURSO_DB_API_TOKEN,
 });
 
-console.log(app.address);
-
 app.get("/", (req, res) => {
-  res.send("CityCube Server :: /menu-search");
+  res.render('main');
+  // res.send("CityCube Server :: /menu-search");
 });
+app.use('/admin', adminRouter)
 
-app.use("/menu-search", menuItemsRouter);
+app.use("/api/menu-search", menuItemsRouter);
+// app.use('/api/auth', authRouter);
+// app.use('/api/order', orderRouter);
+// app.use('/api/)
 
 app.listen(port, () => {
   console.log(`:: CityCube server listening on port: ${port} ::`);

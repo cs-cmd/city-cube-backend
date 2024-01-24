@@ -1,4 +1,4 @@
-import { client } from "../server.js";
+import { client } from "../../server.js";
 import express from "express";
 const menuItemsRouter = express.Router();
 
