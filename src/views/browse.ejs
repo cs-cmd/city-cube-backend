@@ -4,12 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Browse Collections</title>
-    <link rel="stylesheet" href="styles/index.css" type="text/css"/>
+    <link rel="stylesheet" href="/styles/index.css" type="text/css"/>
 </head>
 <body>
     <header class='centered vertical'>
         <h1 class=>Browse CityCube collections</h1>
         <a class='page-button regular' href='/'>Return</a>
     </header>
+
+    <main>
+        <h1 class='centered-text'>Please select browse type</h1>
+        <form class='browse-types' method='GET'>
+            <input class='page-button regular' formaction='/browse/menu-items' type='submit' value='Menu Items'>
+            <input class='page-button regular' formaction='browse/users' type='submit' value='Users'>
+            <input class='page-button regular' formaction='browse/flavors' type='submit' value='All flavors'>
+        </form>
+        <% if (!locals.result_type) { %>
+            <p>No result type</p> 
+        <% } else { 
+            switch(result_type) {
+                case 'menu_items': %>
+                    <%- include('components/item-view'); %>
+                <% break; 
+                case 'users': %>
+                    <%- include('components/user-view'); %>
+                <% break;
+                default: %>
+                <p>Invalid result_type: <%= result_type %></p>
+            <% } // switch %>
+        <% } // if else %>   
+    </main>
 </body>
 </html>
