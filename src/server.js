@@ -10,6 +10,7 @@ import { fileURLToPath } from "url";
 import { dirname, resolve } from "path";
 import { config } from "dotenv";
 import mainPageControl from "#controllers/mainPageControl.js";
+import browseItemsController from "#controllers/browseItemsController.js";
 
 config();
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -30,6 +31,7 @@ const client = createClient({
 
 app.get("/", mainPageControl);
 app.use("/admin", adminRouter);
+app.use("/browse", browseItemsController);
 
 app.use("/api/menu-search", menuItemsRouter);
 // app.use('/api/auth', authRouter);

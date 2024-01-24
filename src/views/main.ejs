@@ -7,14 +7,14 @@
     <link rel="stylesheet" href="styles/index.css" type="text/css"/>
 </head>
 <body>
-    <header>
+    <header class='centered vertical'>
         <h1 class="centered-text">CityCube Administration</h1>
         <p class="centered-text">Welcome to the CityCube Administration page!</p>
         <p class="centered-text warning-text">UNAUTHORIZED USE OF THIS PRODUCT WILL RESULT IN LEGAL ACTION</p>
     </header>
 
     <main class="main-section">
-        <form class="login-form" method="POST" action="/admin/login">
+        <form class="login-form" method="POST">
             <p class="centered-text">Please log in</p>
             
             <div class="input-field">
@@ -28,8 +28,12 @@
             </div>
 
             <div class="input-field status">
-                <input type="submit" value="Log in" class="page-button regular"/>
+                <input formmethod='POST' formaction='/admin/login/' type="submit" value="Log in" class="page-button regular"/>
                 <p class='centered-text warning-text'><%= locals.error_message %></p>
+            </div>
+
+            <div class='input-field'>
+                <input formmethod='GET' formaction='/browse' type='submit' value='Browse Items' class='page-button regular'/>
             </div>
         </form>
     </main>

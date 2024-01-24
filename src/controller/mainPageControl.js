@@ -1,5 +1,5 @@
 function mainPageControl(req, res) {
-  console.log(req);
+  // console.log(req);
   res.render("main");
 }
 
