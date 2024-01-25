@@ -17,6 +17,28 @@
             <th>Quantity</th>
             <th>Functions</th>
         </tr>
+        <% if (locals.display_items !== undefined ||
+                locals.display_items !== null) { 
+                for(let i = 0; i < display_items.length; i++) { %>
+                    <tr>
+                        <td><%= display_items[i].item_id %></td>
+                        <td><%= display_items[i].name %></td>
+                        <td><%= display_items[i].price %></td>
+                        <td><%= display_items[i].description %></td>
+                        <td><%= display_items[i].amount_in_stock %></td>
+                        <td>
+                            <form>
+                                <input type='button' 
+                                    value = 'X' 
+                                    class='page-button regular'/>
+                                <input type='button'
+                                    value='E'
+                                    class='page-button regular'/>
+                            </form>
+                        </td>
+                    </tr>
+               <% } // for loop %>
+            <% } //if statement %>
     </table>
 </body>
 </html>

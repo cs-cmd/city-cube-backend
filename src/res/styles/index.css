@@ -188,3 +188,15 @@ a {
   width: 100%;
   border: 1px solid var(--header-font-color);
 }
+
+.menu-items-table td {
+  border: 1px solid var(--header-font-color);
+  text-align: center;
+  padding: 5px;
+}
+
+.menu-items-table form {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
