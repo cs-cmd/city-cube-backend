@@ -1,19 +1,7 @@
 import express from "express";
 import { body, validationResult } from "express-validator";
-import asyncHandler from "express-async-handler";
-import mainPageControl from "#controllers/mainPageControl.js";
 
 const adminRouter = express.Router();
-const users = [
-  {
-    email: "johndoe@hello.com",
-    password: "helpme",
-  },
-  {
-    email: "ppaul@hello.com",
-    password: "helpdeargod",
-  },
-];
 
 const loginPost = [
   body("email", "Please enter an email")
@@ -44,6 +32,6 @@ const loginPost = [
   },
 ];
 
-adminRouter.post("/login", loginPost, mainPageControl);
+adminRouter.post("/login", loginPost);
 
 export default adminRouter;
