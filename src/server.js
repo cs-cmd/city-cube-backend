@@ -1,37 +1,25 @@
-// create server
-// on GET to /menu-search, validate sender
-// if sender is valid, use passed in (optional) params to
-// gather data from
 import express from "express";
-import menuItemsRouter from "./routers/api/MenuRouter.js";
-import adminRouter from "./routers/AdminRouter.js";
-import { fileURLToPath } from "url";
 import { dirname, resolve } from "path";
+import { fileURLToPath } from "url";
 import { config } from "dotenv";
-import loginPageController from "#controllers/loginPageController.js";
-import browseItemsController from "#controllers/browseItemsController.js";
-
 config();
-const __dirname = dirname(fileURLToPath(import.meta.url));
+
+import dashboardRouter from "#routers/dashboardRouter.js";
 
 const app = express();
-app.set("view engine", "ejs");
-app.set("views", resolve(__dirname, "views"));
-app.use(express.static(__dirname + "/res"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
 const port = process.env.SERVER_PORT || 3000;
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
-app.get("/", mainPageControl);
-app.use("/admin", adminRouter);
-app.use("/browse", browseItemsController);
+app.set("view engine", "ejs");
+app.set("views", __dirname + "/views");
+app.use(express.static(__dirname + "/res"));
 
-app.use("/api/menu-search", menuItemsRouter);
-// app.use('/api/auth', authRouter);
-// app.use('/api/order', orderRouter);
-// app.use('/api/)
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
+
+app.use("/dashboard", dashboardRouter);
 
 app.listen(port, () => {
-  console.log(`:: CityCube server listening on port: ${port} ::`);
+  console.log(`:: CityCube server running on port: ${port} ::`);
 });

@@ -183,3 +183,8 @@ a {
   justify-content: center;
   gap: 15px;
 }
+
+.menu-items-table {
+  width: 100%;
+  border: 1px solid var(--header-font-color);
+}
