@@ -16,8 +16,13 @@ const testMenuItemsDb = (() => {
     },
   ];
   const testUsers = [
-    { email: "admin", password: "admin", type: "admin", user_id: 0 },
-    { email: "user", password: "user", type: "user", user_id: 1 },
+    {
+      email: "admin@citycube.io",
+      password: "admin",
+      type: "admin",
+      user_id: 0,
+    },
+    { email: "user@city-infra.io", password: "user", type: "user", user_id: 1 },
   ];
 
   const checkIfUser = (email) => {

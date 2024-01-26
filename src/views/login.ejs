@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Log in</title>
+    <link rel='stylesheet' href='/styles/index.css'/>
 </head>
 <body>
     <%- include('components/header') %>
-    <main>
-        <form>
+    <main class='main-section'>
+        <form class='form'>
             <section class='input-field'>
-                <label for='email'/>
+                <label for='email'>Email</label>
                 <input
                     type='email'
                     required
@@ -18,13 +19,20 @@
                     class='form-input'/>
             </section>
             <section class='input-field'>
-                <label for='password'/>
+                <label for='password'>Password</label>
                 <input
                     type='password'
                     required
                     name='password'
                     class='form-input'/>
             </section>
+
+            <p class='warning-text centered-text'><%= locals.error_message || ''%></p>
+            <input 
+                type='submit'
+                formmethod='POST'
+                formaction='login'
+                class='page-button regular'/>
         </form>
     </main>
 </body>

@@ -1,5 +1,5 @@
 import cityCubeDb from "#clients/tursoCityCubeClient.js";
-import testMenuItemsDb from "#data-stores/test-menu-items.js";
+import testMenuItemsDb from "#data-stores/testMenuItemsDb.js";
 
 async function menuItemsGet(req, res) {
   // const menu_items = cityCubeDb.getAllMenuItems();

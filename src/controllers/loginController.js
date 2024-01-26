@@ -29,6 +29,11 @@ const loginPost = [
     const errorMessage = req.body.error_message;
     if (errorMessage) {
       res.render("login", { error_message: errorMessage });
+      return;
     }
+    // create session for user
+    res.send("logged in!");
   },
 ];
+
+export { loginGet, loginPost };

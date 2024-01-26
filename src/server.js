@@ -8,6 +8,7 @@ import { config } from "dotenv";
 config();
 
 import dashboardRouter from "#routers/dashboardRouter.js";
+import loginRouter from "#routers/loginRouter.js";
 
 const app = express();
 const port = process.env.SERVER_PORT || 3000;
@@ -24,6 +25,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/dashboard", dashboardRouter);
+app.use("/login", loginRouter);
 
 app.listen(port, () => {
   console.log(`:: CityCube server running on port: ${port} ::`);
