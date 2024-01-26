@@ -15,6 +15,8 @@ const testMenuItemsDb = (() => {
       amount_in_stock: 100,
     },
   ];
+  const adminPasswords = ["helpme123", "badpassword"];
+
   let nextInsert = 2;
 
   const getItem = (id) => {
@@ -57,12 +59,20 @@ const testMenuItemsDb = (() => {
 
   const getItems = () => testMenuItems;
 
+  const confirmAction = (password) => {
+    if (adminPasswords.includes(password)) {
+      return true;
+    }
+    return false;
+  };
+
   return {
     addItem,
     removeItem,
     updateItem,
     getItems,
     getItem,
+    confirmAction,
   };
 })();
 

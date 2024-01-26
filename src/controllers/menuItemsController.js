@@ -37,7 +37,7 @@ const menuItemsEditPost = [
 
 function menuItemsDeleteGet(req, res) {
   const id = req.params.id;
-  const deleteItem = testMenuItems.find((item) => item.item_id == id);
+  const deleteItem = testMenuItemsDb.getItem(id);
   if (!deleteItem) {
     console.log("error");
     res.redirect("/dashboard/menu-items");
@@ -49,31 +49,70 @@ function menuItemsDeleteGet(req, res) {
   });
 }
 
-function menuItemsDeletePost(req, res) {
-  const id = req.params.id;
-  // const wasDeleted = cityCubeDb.deleteMenuItem(id);
-  const wasDeleted = testMenuItemsDb.removeItem(id);
-  if (!wasDeleted) {
-    console.log("Error deleting item");
-  }
+const menuItemsDeletePost = [
+  (req, res, next) => {
+    const adminPassword = req.body.admin_password;
+    if (!adminPassword) {
+      req.body["error_message"] = "Please enter your password";
+      next();
+    }
 
-  res.redirect("/dashboard/menu-items");
-}
+    const confirmed = testMenuItemsDb.confirmAction(adminPassword);
+    if (!confirmed) {
+      req.body["error_message"] = "Incorrect password";
+      next();
+    }
+    next();
+  },
+  (req, res) => {
+    const id = req.params.id;
 
+    const errorMessage = req.body.error_message;
+    if (errorMessage) {
+      const deleteItem = testMenuItemsDb.getItem(id);
+      res.render("features/delete-menu-item", {
+        error_message: errorMessage,
+        candidate_delete_item: deleteItem,
+      });
+      return;
+    }
+
+    // const wasDeleted = cityCubeDb.deleteMenuItem(id);
+    const wasDeleted = testMenuItemsDb.removeItem(id);
+    if (!wasDeleted) {
+      console.log("Error deleting item");
+    }
+
+    res.redirect("/dashboard/menu-items");
+  },
+];
 function menuItemsAddGet(req, res) {
   res.render("features/add-edit-menu-item", {
     refactor_type: "Add",
+    post_url: "/dashboard/menu-items/add/",
   });
 }
 
 const menuItemsAddPost = [
   (req, res) => {
+    const adminPassword = req.body.admin_password;
+    const confirmed = testMenuItemsDb.confirmAction(adminPassword);
     const newItem = {
       name: req.body.item_name,
       price: req.body.price,
       description: req.body.description,
       amount_in_stock: req.body.amount_in_stock,
     };
+
+    if (!confirmed) {
+      res.render("features/add-edit-menu-item", {
+        refactor_type: "Add",
+        post_url: "/dashboard/menu-items/add/",
+        edit_item: newItem,
+        error_message: "Incorrect password",
+      });
+      return;
+    }
 
     testMenuItemsDb.addItem(newItem);
 

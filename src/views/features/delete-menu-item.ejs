@@ -12,6 +12,13 @@
         <h3>Are you sure you want to delete the following item:</h3>
         <p><%= candidate_delete_item.item_id %></p>
         <p><%= candidate_delete_item.name %></p>
+        <p class='warning-text'>Enter Admin password to confirm action</p>
+        <p class='error-message'><%= locals.error_message || '' %><p>
+        <input type='password'
+            name='admin_password'
+            required
+            class='form-input'
+            /> 
         <input type='submit'
             formmethod='POST'
             value='Confirm'
