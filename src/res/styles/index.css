@@ -120,7 +120,7 @@ a {
   align-items: center;
 }
 
-.login-form {
+.form {
   width: clamp(300px, 50%, 750px);
   border: 2px solid var(--header-font-color);
   border-radius: var(--border-radius);
@@ -137,6 +137,9 @@ a {
   &.status {
     flex-direction: column;
   }
+}
+.input-field > * {
+  width: 100%;
 }
 
 .input-field.status {
@@ -178,10 +181,11 @@ a {
   }
 }
 
-.buttons-div {
+.buttons {
   display: flex;
   justify-content: center;
   gap: 15px;
+  margin-top: 15px;
 }
 
 .menu-items-table {

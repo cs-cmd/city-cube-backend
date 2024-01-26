@@ -7,8 +7,9 @@
     <link rel='stylesheet' href='../../../styles/index.css'/>
 </head>
 <body>
+    <main class='main-section'>
     <h1 class='centered-text'><%= locals.refactor_type %> Menu Item</h1>
-    <form>
+    <form class='form'>
         <div class='input-field'>
           <label
             for='item_name'>
@@ -17,9 +18,10 @@
             <input
               type='text'
               name='item_name'
-              value="<%= locals.edit_item.name || '' %>"
+              value="<%= locals.edit_item ? edit_item.name : '' %>"
               class='form-input'
-              required/>
+              required
+              placeholder='Example'/>
         </div>
 
         <div class='input-field'>
@@ -28,7 +30,7 @@
             <input
                 type='number'
                 name='price'
-                value="<%= locals.edit_item.price || 0 %>"
+                value="<%= locals.edit_item ? edit_item.price : 0 %>"
                 class='form-input'
                 required/>
         </div>
@@ -40,8 +42,9 @@
                 type='text'
                 name='description'
                 required 
-                value="<%= locals.edit_item.description || '' %>"
-                class='form-input'/>
+                value="<%= locals.edit_item ? edit_item.description : '' %>"
+                class='form-input'
+                placeholder='Description of item'/>
         </div>
 
         <div class='input-field'>
@@ -51,21 +54,24 @@
                 type='number'
                 name='amount_in_stock'
                 required
-                value='<%= locals.edit_item.amount_in_stock || 0 %>'
+                value='<%= locals.edit_item ? edit_item.amount_in_stock : 0 %>'
                 class='form-input'/>
         </div>
-
+        <div class='buttons'>
             <input
                 type='submit'
                 value='Submit'
                 formmethod='POST'
-                formaction='<%= locals.post_url %>'/>
+                formaction='<%= locals.post_url %>'
+                class='page-button regular'/>
             <input
                 type='submit'
                 value='Cancel'
                 formmethod='GET'
-                formaction='/dashboard/menu-items'/>
-        
+                formaction='/dashboard/menu-items'
+                class='page-button regular'>
+        </div>
     </form>
+    </main>
 </body>
 </html>

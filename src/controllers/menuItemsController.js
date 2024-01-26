@@ -60,10 +60,33 @@ function menuItemsDeletePost(req, res) {
   res.redirect("/dashboard/menu-items");
 }
 
+function menuItemsAddGet(req, res) {
+  res.render("features/add-edit-menu-item", {
+    refactor_type: "Add",
+  });
+}
+
+const menuItemsAddPost = [
+  (req, res) => {
+    const newItem = {
+      name: req.body.item_name,
+      price: req.body.price,
+      description: req.body.description,
+      amount_in_stock: req.body.amount_in_stock,
+    };
+
+    testMenuItemsDb.addItem(newItem);
+
+    res.redirect("/dashboard/menu-items");
+  },
+];
+
 export {
   menuItemsGet,
   menuItemsEditGet,
   menuItemsEditPost,
   menuItemsDeleteGet,
   menuItemsDeletePost,
+  menuItemsAddGet,
+  menuItemsAddPost,
 };
