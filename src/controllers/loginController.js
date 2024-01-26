@@ -32,7 +32,7 @@ const loginPost = [
       return;
     }
     // create session for user
-    res.send("logged in!");
+    res.redirect("/dashboard");
   },
 ];
 
