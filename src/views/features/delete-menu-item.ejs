@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Menu Item</title>
+    <link rel='stylesheet' href='/styles/index.css'/>
+</head>
+<body>
+    <h1 class='centered-text'>Confirm item deletion</h1>
+    <form>
+        <h3>Are you sure you want to delete the following item:</h3>
+        <p><%= candidate_delete_item.item_id %></p>
+        <p><%= candidate_delete_item.name %></p>
+        <input type='submit'
+            formmethod='POST'
+            value='Confirm'
+            class='page-button regular'/>
+        <input type='submit'
+            formmethod='GET'
+            formaction='/dashboard/menu-items'
+            value='Cancel'
+            class='page-button regular'/>
+    </form>
+</body>
+</html>

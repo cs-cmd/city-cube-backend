@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= locals.refactor_type %>menu item</title>
+    <link rel='stylesheet' href='../../../styles/index.css'/>
+</head>
+<body>
+    <h1 class='centered-text'><%= locals.refactor_type %> Menu Item</h1>
+    <form>
+        <div class='input-field'>
+          <label
+            for='item_name'>
+            Product Name
+          </label>
+            <input
+              type='text'
+              name='item_name'
+              value="<%= locals.edit_item.name || '' %>"
+              class='form-input'
+              required/>
+        </div>
+
+        <div class='input-field'>
+            <label for='price'>Price</label>
+
+            <input
+                type='number'
+                name='price'
+                value="<%= locals.edit_item.price || 0 %>"
+                class='form-input'
+                required/>
+        </div>
+
+        <div class='input-field'>
+            <label for='description'>Item Description</label>
+            
+            <input
+                type='text'
+                name='description'
+                required 
+                value="<%= locals.edit_item.description || '' %>"
+                class='form-input'/>
+        </div>
+
+        <div class='input-field'>
+            <label for='amount_in_stock'>Amount in stock</label>
+
+            <input
+                type='number'
+                name='amount_in_stock'
+                required
+                value='<%= locals.edit_item.amount_in_stock || 0 %>'
+                class='form-input'/>
+        </div>
+
+            <input
+                type='submit'
+                value='Submit'
+                formmethod='POST'
+                formaction='<%= locals.post_url %>'/>
+            <input
+                type='submit'
+                value='Cancel'
+                formmethod='GET'
+                formaction='/dashboard/menu-items'/>
+        
+    </form>
+</body>
+</html>

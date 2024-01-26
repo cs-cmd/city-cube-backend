@@ -13,6 +13,14 @@ const cityCubeDb = (() => {
     return menuItems;
   };
 
+  const deleteMenuItem = async (id) => {
+    // potential issue here with users passing in malicious code; refactor
+    // sanitize data, since this could be user provided
+    await tursoCityCubeClient.execute(
+      `delete from menu_items where id = ${id}`,
+    );
+  };
+
   return {
     getAllMenuItems,
   };

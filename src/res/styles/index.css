@@ -178,7 +178,7 @@ a {
   }
 }
 
-.browse-types {
+.buttons-div {
   display: flex;
   justify-content: center;
   gap: 15px;

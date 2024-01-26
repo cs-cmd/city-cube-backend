@@ -13,6 +13,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 app.set("view engine", "ejs");
 app.set("views", __dirname + "/views");
 app.use(express.static(__dirname + "/res"));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
