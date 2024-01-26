@@ -15,6 +15,28 @@ const testMenuItemsDb = (() => {
       amount_in_stock: 100,
     },
   ];
+  const testUsers = [
+    { email: "admin", password: "admin", type: "admin", user_id: 0 },
+    { email: "user", password: "user", type: "user", user_id: 1 },
+  ];
+
+  const checkIfUser = (email) => {
+    for (let i = 0; i < testUsers.length; i++) {
+      if (testUsers[i].email == email) {
+        return true;
+      }
+    }
+    return false;
+  };
+  const checkUserPassword = (email, password) => {
+    for (let i = 0; i < testUsers.length; i++) {
+      if (testUsers[i].email == email && testUsers[i].password == password) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   const adminPasswords = ["helpme123", "badpassword"];
 
   let nextInsert = 2;
@@ -73,6 +95,8 @@ const testMenuItemsDb = (() => {
     getItems,
     getItem,
     confirmAction,
+    checkIfUser,
+    checkUserPassword,
   };
 })();
 
