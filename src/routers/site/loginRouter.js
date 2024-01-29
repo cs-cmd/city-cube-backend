@@ -1,4 +1,4 @@
-import * as login from "#controllers/loginController.js";
+import * as login from "#controllers/site/loginController.js";
 import express from "express";
 
 const loginRouter = express.Router();

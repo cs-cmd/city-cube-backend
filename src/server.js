@@ -7,8 +7,8 @@ import { fileURLToPath } from "url";
 import { config } from "dotenv";
 config();
 
-import dashboardRouter from "#routers/dashboardRouter.js";
-import loginRouter from "#routers/loginRouter.js";
+import dashboardRouter from "#routers/site/dashboardRouter.js";
+import loginRouter from "#routers/site/loginRouter.js";
 
 const app = express();
 const port = process.env.SERVER_PORT || 3000;
