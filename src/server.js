@@ -1,7 +1,4 @@
 import express from "express";
-import session from "express-session";
-import passport from "passport";
-import Strategy from "passport-local";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { config } from "dotenv";
@@ -16,6 +13,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 app.set("view engine", "ejs");
 app.set("views", __dirname + "/views");
+
 app.use(express.static(__dirname + "/res"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());

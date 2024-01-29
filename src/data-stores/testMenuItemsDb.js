@@ -25,7 +25,7 @@ const testMenuItemsDb = (() => {
     { email: "user@city-infra.io", password: "user", type: "user", user_id: 1 },
   ];
 
-  const checkIfUser = (email) => {
+  const checkIfUser = async (email) => {
     for (let i = 0; i < testUsers.length; i++) {
       if (testUsers[i].email == email) {
         return true;
@@ -33,13 +33,26 @@ const testMenuItemsDb = (() => {
     }
     return false;
   };
-  const checkUserPassword = (email, password) => {
+  const checkUserPassword = async (email, password) => {
     for (let i = 0; i < testUsers.length; i++) {
       if (testUsers[i].email == email && testUsers[i].password == password) {
         return true;
       }
     }
     return false;
+  };
+
+  const getUser = (email) => {
+    for (let i = 0; i < testUsers.length; i++) {
+      if (testUsers[i].email == email) {
+        return {
+          email: testUsers[i].email,
+          type: testUsers[i].type,
+          user_id: testUsers[i].user_id,
+        };
+      }
+      return null;
+    }
   };
 
   const adminPasswords = ["helpme123", "badpassword"];
@@ -102,6 +115,7 @@ const testMenuItemsDb = (() => {
     confirmAction,
     checkIfUser,
     checkUserPassword,
+    getUser,
   };
 })();
 

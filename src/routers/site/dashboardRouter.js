@@ -4,13 +4,14 @@ import menuItemsRouter from "#routers/site/menuItemsRouter.js";
 
 const dashboardRouter = express.Router();
 
-// dashboardRouter.use((req, res, next) => {
-//    if (req.user) {
-//      next();
-//    } else {
-//   res.redirect("/login");
-//   }
-// });
+dashboardRouter.use((req, res, next) => {
+  const email = sessionStorage.getItem("email");
+  if (email) {
+    next();
+  } else {
+    res.redirect("/login");
+  }
+});
 dashboardRouter.get("/", dash.dashboardHomeGet);
 dashboardRouter.use("/menu-items", menuItemsRouter);
 

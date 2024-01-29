@@ -11,19 +11,14 @@ const loginPost = [
 
     if (!email) {
       req.body.error_message = "Please enter your email.";
-      next();
     } else if (!password) {
       req.body.error_message = "Please enter your password.";
-      next();
     } else if (!testMenuItemsDb.checkIfUser(email)) {
       req.body.error_message = "User does not exist.";
-      next();
     } else if (!testMenuItemsDb.checkUserPassword(email, password)) {
       req.body.error_message = "Incorrect password.";
-      next();
-    } else {
-      next();
     }
+    next();
   },
   (req, res) => {
     const errorMessage = req.body.error_message;
@@ -32,6 +27,7 @@ const loginPost = [
       return;
     }
     // create session for user
+    sessionStorage.setItem("email", req.body.email);
     res.redirect("/dashboard");
   },
 ];
