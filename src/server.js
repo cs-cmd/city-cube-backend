@@ -2,10 +2,12 @@ import express from "express";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { config } from "dotenv";
-config();
-
 import dashboardRouter from "#routers/site/dashboardRouter.js";
 import loginRouter from "#routers/site/loginRouter.js";
+import session from 'session';
+import passport from 'passport';
+import 
+config();
 
 const app = express();
 const port = process.env.SERVER_PORT || 3000;

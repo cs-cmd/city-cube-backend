@@ -1,4 +1,6 @@
 import { createClient } from "@libsql/client";
+import { config } from 'dotenv';
+config();
 
 const cityCubeDb = (() => {
   const tursoCityCubeClient = createClient({
