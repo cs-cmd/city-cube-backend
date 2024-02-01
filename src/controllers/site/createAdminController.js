@@ -2,8 +2,12 @@ import testUserItemsDb from '#data-stores/testUserItemsDb.js';
 import { body, validationResult } from 'express-validator';
 import bcrypt from 'bcryptjs';
 
+function renderPage(res, errMsg = null) {
+    const error = errMsg ? { error_message: errMsg } : null;
+    res.render('features/register-user', error);
+}
 function createUserGet(req, res, next) {
-    res.render('register-user');
+    renderPage(res);
 }
 
 const createUserPost = [
@@ -20,10 +24,8 @@ const createUserPost = [
     },
     (req, res, next) => {
         const errorMessage = req.body.error_message;
-        if(!errorMessage) {
-            res.render('register-user', {
-                error_message: errorMessage,
-            });
+        if(errorMessage) {
+            renderPage(res, errorMessage);
             return;
         }
 
@@ -32,15 +34,14 @@ const createUserPost = [
 
         // Hash password
         // add user to db
-        bcrypt.hash(password, 10, (err, hashedPassword) => {
+        bcrypt.hash(password, 10, async (err, hashedPassword) => {
             if(err) {
-                res.render('register-user', {
-                    error_message: err
-                });
+                renderPage(res, err);
                 return;
             }
 
             testUserItemsDb.addUser(email, hashedPassword, 'admin');
+            res.redirect('/dashboard');
         })
     }
 ];

@@ -4,26 +4,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register Admin User</title>
+    <link rel="stylesheet" href="/styles/index.css"/>
 </head>
 <body>
-    <form>
-        <label>
-            Email
-            <input type="email" required/>
-        </label>
+    <%- include('../components/header'); %>
+    <main class="main-section">
+    <h3>Create new Admin User</h3>
+    <form id="create-user-form" class="form">
+        <section class="input-field">
+            <label for="email">Email</label>
+            <input type="email"
+            required
+            name="email"
+            class="form-input"/>
+        </section>
 
-        <label>
-            Password
-            <input type="password" required/>
-        </label>
+        <section class="input-field">
+            <label for="password">Password</label>
+            <input type="password"
+            required
+            name="password"
+            class="form-input"
+            id="password"/>
+        </section>
 
-        <label>
-            Confirm Password
-            <input type="password" required/>
-        </label>
+        <section class="input-field">
+            <label for="conf_password">
+                Confirm Password
+            </label>
+            <input type="password"
+            required
+            name="conf_password"
+            class="form-input"
+            id="conf-password"/>
+        </section>
 
-        <input type="submit" value="Register"/>
+        <input type="submit" 
+        value="Register"
+        class="page-button regular"
+        formmethod="POST"/>
     </form>
-    
+    <% if(locals.error_message) { %>
+        <p class="warning-text" id="form-error"><%= locals.error_message %></p>
+    <% } // if error_message is present %>
+    </main>
+
+    <script>
+        document.getElementById('create-user-form').addEventListener('submit', (e) => {
+            const password = document.getElementById('password').value;
+            const confPassword = document.getElementById('conf-password').value;
+            if (password !== confPassword) {
+                document.querySelector('#form-error').innerText = 'Passwords do not match';
+                return false;
+            } else {
+                return true;
+            }
+        })
+    </script>
 </body>
 </html>

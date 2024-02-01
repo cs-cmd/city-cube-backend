@@ -4,9 +4,9 @@ import { fileURLToPath } from "url";
 import { config } from "dotenv";
 import dashboardRouter from "#routers/site/dashboardRouter.js";
 import loginRouter from "#routers/site/loginRouter.js";
-import session from 'session';
+import session from 'express-session';
 import passport from 'passport';
-import LocalStrategy from "#util/LocalStrategy";
+import { localStrategy } from "#util/LocalStrategy.js";
 config();
 
 const app = express();

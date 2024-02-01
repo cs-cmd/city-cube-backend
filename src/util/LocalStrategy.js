@@ -1,5 +1,5 @@
 import { Strategy } from "passport";
-import testUserItemsDb from "#data-stores/testUserItemsDb";
+import testUserItemsDb from "#data-stores/testUserItemsDb.js";
 
 const LocalStrategy = Strategy;
 

@@ -27,7 +27,9 @@
                     class='form-input'/>
             </section>
 
-            <p class='warning-text centered-text'><%= locals.error_message || ''%></p>
+            <% if(locals.error_message) { %>
+                <p class="warning-text centered-text"><%= locals.error_message %></p>
+            <% } // if error is present %>
             <input 
                 type='submit'
                 formmethod='POST'

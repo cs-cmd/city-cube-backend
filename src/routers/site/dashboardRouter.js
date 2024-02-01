@@ -1,7 +1,7 @@
 import express from "express";
 import * as dash from "#controllers/site/dashboardController.js";
 import menuItemsRouter from "#routers/site/menuItemsRouter.js";
-import createAdminRouter from "#routers/site/createAdminRouter";
+import createAdminRouter from "#routers/site/createAdminRouter.js";
 
 const dashboardRouter = express.Router();
 

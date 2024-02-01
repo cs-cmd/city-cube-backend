@@ -1,6 +1,6 @@
 import { body, validationResult } from "express-validator";
 import bcrypt from 'bcryptjs';
-import testUserItemsDb from "#data-stores/testUserItemsDb";
+import testUserItemsDb from "#data-stores/testUserItemsDb.js";
 
 function loginGet(req, res) {
   res.render("login");
@@ -30,18 +30,11 @@ const loginPost = [
       req.body.error_message = "User does not exist.";
     }
 
-    bcrypt.hash(password, 10, async(err, hashedPassword) => {
-      if(err) {
-        req.body.error_message = 'Password check failed';
-        next();
-      }      
+    if(!(await testUserItemsDb.checkUserPassword(email, password))) {
+      req.body.error_message = 'Password is incorrect';
+    }
 
-      if(!(await testUserItemsDb.checkUserPassword(email, hashedPassword))) {
-        req.body.error_message = 'Password is incorrect';
-      }
-
-      next();      
-    })
+    next();
   },
   (req, res) => {
     const errorMessage = req.body.error_message;
