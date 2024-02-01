@@ -1,7 +1,9 @@
 import { Strategy } from "passport";
 import testUserItemsDb from "#data-stores/testUserItemsDb";
 
-const LocalStrategy = new Strategy(async (email, password, done) => {
+const LocalStrategy = Strategy;
+
+const localStrategy = new LocalStrategy(async (email, password, done) => {
     try {
         const user = testUserItemsDb.getUser(email);
 
@@ -14,4 +16,6 @@ const LocalStrategy = new Strategy(async (email, password, done) => {
     } catch(err) {
         return done(err);
     }
-})
+});
+
+export { localStrategy }

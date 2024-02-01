@@ -18,7 +18,8 @@
     "#api/*.js": "./src/routers/api/*.js",
     "#routers/*.js": "./src/routers/*.js",
     "#clients/*.js": "./src/clients/*.js",
-    "#data-stores/*.js": "./src/data-stores/*.js"
+    "#data-stores/*.js": "./src/data-stores/*.js",
+    "#util/*.js": "./src/util/*.js"
   },
   "dependencies": {
     "@libsql/client": "^0.4.0-pre.7",

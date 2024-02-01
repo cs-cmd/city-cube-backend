@@ -6,7 +6,7 @@ import dashboardRouter from "#routers/site/dashboardRouter.js";
 import loginRouter from "#routers/site/loginRouter.js";
 import session from 'session';
 import passport from 'passport';
-import 
+import LocalStrategy from "#util/LocalStrategy";
 config();
 
 const app = express();
@@ -16,6 +16,9 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 app.set("view engine", "ejs");
 app.set("views", __dirname + "/views");
 
+app.use(session({secret: 'cats', resave: false, saveUninitialized: true}));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(express.static(__dirname + "/res"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());

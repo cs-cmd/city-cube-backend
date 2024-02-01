@@ -1,18 +1,13 @@
 import express from "express";
 import * as dash from "#controllers/site/dashboardController.js";
 import menuItemsRouter from "#routers/site/menuItemsRouter.js";
+import createAdminRouter from "#routers/site/createAdminRouter";
 
 const dashboardRouter = express.Router();
 
-dashboardRouter.use((req, res, next) => {
-  const email = sessionStorage.getItem("email");
-  if (email) {
-    next();
-  } else {
-    res.redirect("/login");
-  }
-});
+// dashboardRouter.use(dash.checkIfSignedIn);
 dashboardRouter.get("/", dash.dashboardHomeGet);
 dashboardRouter.use("/menu-items", menuItemsRouter);
+dashboardRouter.use('/create-admin', createAdminRouter);
 
 export default dashboardRouter;
