@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import dashboardRouter from "#routers/site/dashboardRouter.js";
 import loginRouter from "#routers/site/loginRouter.js";
 import logoutRouter from '#routers/site/logoutRouter.js';
+import apiRouter from "#routers/api/apiRouter.js";
 
 config();
 
@@ -28,6 +29,8 @@ app.get("/", (req, res) => {
 app.use("/dashboard", dashboardRouter);
 app.use("/login", loginRouter);
 app.use('/logout', logoutRouter);
+
+app.use('/api', apiRouter);
 
 app.listen(port, () => {
   console.log(`:: CityCube server running on port: ${port} ::`);
