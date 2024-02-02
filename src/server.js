@@ -7,8 +7,15 @@ import dashboardRouter from "#routers/site/dashboardRouter.js";
 import loginRouter from "#routers/site/loginRouter.js";
 import logoutRouter from '#routers/site/logoutRouter.js';
 import apiRouter from "#routers/api/apiRouter.js";
+import cors from 'cors';
 
 config();
+
+const allowList = ['http://localhost:5173'];
+const corsOptions = {
+  origin: 'http://localhost:5173',
+  optionsSuccessStatus: 200
+};
 
 const app = express();
 const port = process.env.SERVER_PORT || 3000;
@@ -30,7 +37,7 @@ app.use("/dashboard", dashboardRouter);
 app.use("/login", loginRouter);
 app.use('/logout', logoutRouter);
 
-app.use('/api', apiRouter);
+app.use('/api', cors(corsOptions), apiRouter);
 
 app.listen(port, () => {
   console.log(`:: CityCube server running on port: ${port} ::`);
