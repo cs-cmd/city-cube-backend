@@ -1,6 +1,6 @@
 import { body, validationResult } from "express-validator";
-import bcrypt from 'bcryptjs';
 import testUserItemsDb from "#data-stores/testUserItemsDb.js";
+import sessions from "#util/sessions.js";
 
 function loginGet(req, res) {
   res.render("login");
@@ -45,6 +45,11 @@ const loginPost = [
       return;
     }
 
+    const user = await testUserItemsDb.getUser(req.body.email);
+
+    const sessionId = await sessions.addSession(user);
+
+    res.cookie('session-id', sessionId);
     res.redirect('/dashboard');
   },
 ];

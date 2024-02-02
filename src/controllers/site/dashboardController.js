@@ -1,6 +1,9 @@
+import sessions from '#util/sessions.js';
+
 function checkIfSignedIn(req, res, next) {
-  const user = null; //get email/username
-  if(!user) {
+  const sessionId = req.cookies['session-id'];
+
+  if(!sessions.isValidSession(sessionId)) {
     res.redirect('/login');
   } else {
     next();
@@ -9,6 +12,7 @@ function checkIfSignedIn(req, res, next) {
 
 // gets basic user data
 function dashboardHomeGet(req, res) {
+  console.log(req.cookies['session-id']);
   res.render("dashboard");
 }
 

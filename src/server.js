@@ -2,13 +2,11 @@ import express from "express";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { config } from "dotenv";
+import cookieParser from 'cookie-parser';
 import dashboardRouter from "#routers/site/dashboardRouter.js";
 import loginRouter from "#routers/site/loginRouter.js";
 import logoutRouter from '#routers/site/logoutRouter.js';
-import session from 'express-session';
-import appSession from "#util/sessions.js";
-import passport from 'passport';
-import { localStrategy, serailizeUser, deserializeUser } from "#util/LocalStrategy.js";
+
 config();
 
 const app = express();
@@ -18,8 +16,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 app.set("view engine", "ejs");
 app.set("views", __dirname + "/views");
 
-app.use(session({secret: 'cats', resave: false, saveUninitialized: true}));
-app.use(appSession);
+app.use(cookieParser());
 app.use(express.static(__dirname + "/res"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());

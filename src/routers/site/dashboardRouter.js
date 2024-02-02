@@ -5,7 +5,7 @@ import createAdminRouter from "#routers/site/createAdminRouter.js";
 
 const dashboardRouter = express.Router();
 
-// dashboardRouter.use(dash.checkIfSignedIn);
+dashboardRouter.use(dash.checkIfSignedIn);
 dashboardRouter.get("/", dash.dashboardHomeGet);
 dashboardRouter.use("/menu-items", menuItemsRouter);
 dashboardRouter.use('/create-admin', createAdminRouter);

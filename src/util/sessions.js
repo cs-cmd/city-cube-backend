@@ -1,20 +1,37 @@
-import sqlite from 'better-sqlite3';
-import session from 'express-sesson';
-import * as sessionStore from 'better-sqlite3-session-store';
+import { v5 } from 'uuid';
 
-const SqlliteStore = sessionStore(session);
-const db = new sqlite('sessions.db', {verbose: console.log});
+const NS = '9554bd05-6417-431e-a8f8-7b2ed6c69898';
 
-const appSession = session({
-    store: new SqlliteStore({
-        client: db,
-        expired: {
-            clear: true,
-            intervalMs: 900000
-        }
-    }),
-    secret: 'keyboard cat',
-    resave: false,
-});
+const sessions = (() => {
+    const activeSessions = {};
 
-export default appSession;
+    const addSession = async(user) => {
+        const sessionId = v5(user.email, NS);
+
+        activeSessions[sessionId] = user;
+
+        return sessionId;
+    }
+
+    const removeSession = async(sessionId) => {
+        delete activeSessions[sessionId];
+    }
+
+    const getSessionUser = async(sessionId) => {
+        return activeSessions[sessionId];
+    }
+
+    const isValidSession = async(sessionId) => {
+        return activeSessions[sessionId] !== undefined 
+            && activeSessions[sessionId] !== null;
+    }
+
+    return {
+        addSession,
+        removeSession,
+        getSessionUser,
+        isValidSession
+    }
+})();
+
+export default sessions;
