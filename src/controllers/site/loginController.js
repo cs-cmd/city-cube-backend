@@ -26,24 +26,26 @@ const loginPost = [
     // hash password here
     const password = req.body.password;
 
-    if (!(await testUserItemsDb.checkIfUser(email))) {
+    if (!(await testUserItemsDb.isUser(email))) {
       req.body.error_message = "User does not exist.";
+      next();
     }
 
     if(!(await testUserItemsDb.checkUserPassword(email, password))) {
       req.body.error_message = 'Password is incorrect';
+      next();
     }
 
     next();
   },
-  (req, res) => {
+  async (req, res) => {
     const errorMessage = req.body.error_message;
     if (errorMessage) {
       res.render("login", { error_message: errorMessage });
       return;
     }
 
-    res.redirect("/dashboard");
+    res.redirect('/dashboard');
   },
 ];
 

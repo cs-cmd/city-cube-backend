@@ -17,9 +17,9 @@ const testUserItemsDb = (() => {
   ];
 
 
-  const checkIfUser = async (email) => {
+  const isUser = async (email) => {
     for (let i = 0; i < testUsers.length; i++) {
-      if (testUsers[i].email == email) {
+      if (testUsers[i].email === email) {
         return true;
       }
     }
@@ -28,15 +28,20 @@ const testUserItemsDb = (() => {
 
   const checkUserPassword = async (email, password) => {
     for (let i = 0; i < testUsers.length; i++) {
-      if (email === testUsers[i].email) {
-        const isCorrect = await bcrypt.compare(password, testUsers[i].password);
-        return isCorrect;
+      if(email !== testUsers[i].email) {
+        continue;
       }
+
+      let isPasswordCorrect = false;
+      return await bcrypt.compare(password, testUsers[i].password)
+      .then(res => res);
+      
     }
+
     return false;
   };
 
-  const getUser = (email) => {
+  const getUser = async (email) => {
     for (let i = 0; i < testUsers.length; i++) {
       if (testUsers[i].email == email) {
         return {
@@ -49,7 +54,7 @@ const testUserItemsDb = (() => {
     }
   };
 
-  const addUser = (email, password, type) => {
+  const addUser = async (email, password, type) => {
     bcrypt.hash(password, 10, async(err, hashedPassword) => {
         if(err) {
             // error
@@ -64,7 +69,6 @@ const testUserItemsDb = (() => {
         };
 
         testUsers.push(newUser);
-        console.log('user added', email);
 
         return null;
     })
@@ -78,7 +82,7 @@ const testUserItemsDb = (() => {
   }
 
   return {
-    checkIfUser,
+    isUser,
     checkUserPassword,
     getUser,
     addUser,

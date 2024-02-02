@@ -4,9 +4,11 @@ import { fileURLToPath } from "url";
 import { config } from "dotenv";
 import dashboardRouter from "#routers/site/dashboardRouter.js";
 import loginRouter from "#routers/site/loginRouter.js";
+import logoutRouter from '#routers/site/logoutRouter.js';
 import session from 'express-session';
+import appSession from "#util/sessions.js";
 import passport from 'passport';
-import { localStrategy } from "#util/LocalStrategy.js";
+import { localStrategy, serailizeUser, deserializeUser } from "#util/LocalStrategy.js";
 config();
 
 const app = express();
@@ -17,8 +19,7 @@ app.set("view engine", "ejs");
 app.set("views", __dirname + "/views");
 
 app.use(session({secret: 'cats', resave: false, saveUninitialized: true}));
-app.use(passport.initialize());
-app.use(passport.session());
+app.use(appSession);
 app.use(express.static(__dirname + "/res"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -29,6 +30,7 @@ app.get("/", (req, res) => {
 
 app.use("/dashboard", dashboardRouter);
 app.use("/login", loginRouter);
+app.use('/logout', logoutRouter);
 
 app.listen(port, () => {
   console.log(`:: CityCube server running on port: ${port} ::`);

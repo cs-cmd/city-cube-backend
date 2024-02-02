@@ -24,6 +24,8 @@
   "dependencies": {
     "@libsql/client": "^0.4.0-pre.7",
     "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^9.3.0",
+    "better-sqlite3-session-store": "^0.1.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.0",
     "ejs": "^3.1.9",
