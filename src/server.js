@@ -8,6 +8,7 @@ import loginRouter from "#routers/site/loginRouter.js";
 import logoutRouter from '#routers/site/logoutRouter.js';
 import apiRouter from "#routers/api/apiRouter.js";
 import cors from 'cors';
+import cityCubeDb from '#clients/tursoCityCubeClient.js';
 
 config();
 
