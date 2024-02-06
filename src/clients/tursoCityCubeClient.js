@@ -78,12 +78,64 @@ const cityCubeDb = (() => {
     );
   };
 
+
+  const isValidUser = async (email) => {
+    const userInstance = await tursoCityCubeClient.execute(
+      `select 'Y' from users where email = ${email};`
+    );
+
+    return userInstance.rows[0] != null && userInstance.rows[0] != undefined;
+  }
+
+  const isCorrectPassword = async (email, password) => {
+    const isUser = isValidUser(email);
+
+    if(!isUser) {
+      return false;
+    }
+
+    let isPasswordCorrect = false;
+
+    const storedPassword = await tursoCityCubeClient.execute(
+      `select password from users where email = ${email};`
+    );
+
+    return await bcrypt.compare(password, storedPassword).then(res => res);
+  }
+
+  const getUser = async(email) => {
+    const user = await tursoCityCubeClient.execute(
+      `select email, type, user_id from users where email = ${email};`
+    );
+
+    return user.rows[0];
+  }
+
+  const addUser = async (email, password, type) => {
+    const wasSuccessful = bcrypt.hash(password, 10, async(err, hashedPassword) => {
+      if(err) {
+        console.log('Error adding user: ', err);
+        return err;
+      }
+
+      return await tursoCityCubeClient.execute(
+        `insert into users(email, type, password) values({}, {}, {});`
+        email, password, type);
+    });
+
+    return wasSuccessful;
+  }
+
   return {
     getAllMenuItems,
     getMenuItem,
     addMenuItem,
     updateMenuItem,
     deleteMenuItem,
+    isValidUser, 
+    isCorrectPassword,
+    getUser,
+    addUser
   };
 })();
 
