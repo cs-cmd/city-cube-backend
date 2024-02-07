@@ -91,14 +91,14 @@ const cityCubeDb = (() => {
 
   const isValidUser = async (email) => {
     const userInstance = await tursoCityCubeClient.execute(
-      `select 'Y' from users where email = ${email};`
+      `select 'Y' from users where email = "${email}";`
     );
 
     return userInstance.rows[0] != null && userInstance.rows[0] != undefined;
   }
 
   const isCorrectPassword = async (email, password) => {
-    const isUser = isValidUser(email);
+    const isUser = await isValidUser(email);
 
     if(!isUser) {
       return false;
@@ -106,20 +106,27 @@ const cityCubeDb = (() => {
 
     let isPasswordCorrect = false;
 
-    const storedPassword = await tursoCityCubeClient.execute(
-      `select password from users where email = ${email};`
-    );
+    const storedPasswordRow = (await tursoCityCubeClient.execute(
+      `select password from users where email = "${email}";`
+    )).rows[0];
+
+    if(!storedPasswordRow) {
+      return false;
+    }
+
+    const storedPassword = storedPasswordRow.password;
+
+    if(!storedPassword) {
+      return false;
+    }
 
     return await bcrypt.compare(password, storedPassword).then(res => res);
   }
 
   const getUser = async(email) => {
-    const user = await tursoCityCubeClient.execute({
-      sql: `select email, type, user_id from users where email = ?;`,
-      args: `"${email}"`
-    });
+    const user = await tursoCityCubeClient.execute(`select email, type, user_id from users where email = "${email}";`);
 
-    return user.rows[0];
+    return user.rows[0] || null;
   }
 
   const addUser = async (email, password, type) => {

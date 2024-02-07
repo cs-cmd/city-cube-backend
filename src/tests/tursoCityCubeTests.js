@@ -55,7 +55,7 @@ async function deleteMenuItemTest() {
 // all menu_items tests pass
 
 async function isValidUserTest() {
-  const isValidUser = cityCubeDb.isValidUser("hello@world.com");
+  const isValidUser = await cityCubeDb.isValidUser("hello@world.com");
   console.log('is valid user: hello@world.com:', isValidUser);
 }
 
@@ -70,5 +70,29 @@ async function addUserTest() {
   console.log(result);
 }
 
+async function isCorrectPasswordTest() {
+  const email = 'hello@world.com';
+  const password = 'hello';
+
+  const isCorrect = await cityCubeDb.isCorrectPassword(email, password);
+  console.log('is correct password test should be true: ', isCorrect);
+
+  const passwordWrong = 'hello!';
+  const isWrong = await cityCubeDb.isCorrectPassword(email, passwordWrong);
+  console.log('is incorrect password wrong, should be false:', isWrong);
+}
+
+async function getUserTest() {
+  const email = 'hello@world.com';
+  const userInstance = await cityCubeDb.getUser(email);
+
+  console.log(userInstance);
+
+  const badEmail = 'hello@world.biz';
+  const noUserInstance = await cityCubeDb.getUser(badEmail);
+  console.log(noUserInstance);
+}
 // await addUserTest(); // - passed
-await isValidUserTest();
+// await isValidUserTest(); - passed
+// await isCorrectPasswordTest(); - passed
+// await getUserTest(); - passed
