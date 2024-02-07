@@ -1,6 +1,7 @@
 import { createClient } from "@libsql/client";
 import { config } from 'dotenv';
 config();
+import bcrypt from 'bcryptjs';
 
 const cityCubeDb = (() => {
   const tursoCityCubeClient = createClient({
@@ -18,22 +19,24 @@ const cityCubeDb = (() => {
 
   const getMenuItem = async (id) => {
     // sanitize input here
-    const menuItem = await tursoCityCubeClient.execute(
-      `select * from menu_items where item_id = ${id};`
-    );
+    const menuItem = await tursoCityCubeClient.execute({
+      sql: `select * from menu_items where item_id = ?;`,
+      args: [id]
+    });
 
     return menuItem.rows[0];
   };
 
   const addMenuItem = async (newItem) => {
-    const wasSuccessful = await tursoCityCubeClient.execute(
-      `insert into menu_items(name, price, description, amount_in_stock) values(${newItem.name}, ${newItem.price}, ${newItem.description}, ${newItem.amountInStock});`
-    );
+    const wasSuccessful = await tursoCityCubeClient.execute({
+      sql: `insert into menu_items(name, price, description, amount_in_stock) values(?, ?, ?, ?);`,
+      args: [newItem.name, newItem.price, newItem.description, newItem.amount_in_stock]
+    }).rowsAffected != 0;
 
     return wasSuccessful;
   };
 
-  const updateMenuItem = async (newItem) => {
+  const updateMenuItem = async (itemId, newItem) => {
 
     const menuItemUpdateFields = [
       'name',
@@ -42,7 +45,7 @@ const cityCubeDb = (() => {
       'amount_in_stock'
     ];
 
-    const menuItem = await getMenuItem(item);
+    const menuItem = await getMenuItem(itemId);
 
     if(!menuItem) {
       throw new Error("Update item not found in db");
@@ -53,21 +56,28 @@ const cityCubeDb = (() => {
     for(let i = 0; i < menuItemUpdateFields.length; i++) {
       let key = menuItemUpdateFields[i];
 
-      // if update statements isn't null, add comma to separate
-      if(updateStatements !== null) {
-        updateStatements.concat(',');
+      if (newItem[key] == undefined) {
+        continue;
       }
 
-      if(menuItem[key] !== newItem[key]){
-        updateStatements.concat(`set ${key} = ${newItem[key]}`);
-      }
+      // TODO: ADD DATATYPE VALIDATION
+
+      // if item is a string, surround in double quotes
+      let formattedValue = typeof newItem[key] == 'string' ? `\"${newItem[key]}\"` : newItem[key];
+
+    // if update statements has no values to set, prefix with 'set', otherwise prefix with a comma to separate updates
+      let prefix = updateStatements == '' ? 'set' : ',';
+ 
+      updateStatements += `${prefix} ${key} = ${formattedValue}`;
     }
     
-    const wasSuccessful = await tursoCityCubeClient.execute(
-      `update menu_items ${updateStatements} where item_id = ${menuItem.item_id};`
-    );
+    // used separately-formatted SQL statement here as opposed to 
+    // crating statement in 
+    let sqlStatement = `update menu_items ${updateStatements} where item_id = ${itemId}`;
 
-    return wasSuccessful;
+    const wasSuccessful = await tursoCityCubeClient.execute(sqlStatement);
+
+    return wasSuccessful != undefined && wasSuccessful != 0;
   }
 
   const deleteMenuItem = async (id) => {
@@ -119,8 +129,8 @@ const cityCubeDb = (() => {
       }
 
       return await tursoCityCubeClient.execute(
-        `insert into users(email, type, password) values({}, {}, {});`
-        email, password, type);
+        `insert into users(email, type, password) values(${email}, ${password}, ${type});`
+      );
     });
 
     return wasSuccessful;
