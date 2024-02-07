@@ -38,8 +38,37 @@ async function updateMenuItemTest() {
   console.log("updateMenuItem test passed: ", wasSuccessful);
 }
 
+async function deleteMenuItemTest() {
+  const itemId = 7;
+
+  const wasSuccessful = await cityCubeDb.deleteMenuItem(itemId);
+
+  console.log(wasSuccessful);
+}
 
 // await testGetAll(); - works
 // await testGetItem(); - works
 // await testAddMenuItem(); - works
-await updateMenuItemTest();
+// await updateMenuItemTest(); - works
+// await deleteMenuItemTest(); - works
+
+// all menu_items tests pass
+
+async function isValidUserTest() {
+  const isValidUser = cityCubeDb.isValidUser("hello@world.com");
+  console.log('is valid user: hello@world.com:', isValidUser);
+}
+
+async function addUserTest() {
+ 
+  const email = 'hello@world.com';
+  const password = 'hello';
+  const type = 'admin';
+
+  const result = await cityCubeDb.addUser(email, password, type);
+
+  console.log(result);
+}
+
+// await addUserTest(); // - passed
+await isValidUserTest();

@@ -60,8 +60,6 @@ const cityCubeDb = (() => {
         continue;
       }
 
-      // TODO: ADD DATATYPE VALIDATION
-
       // if item is a string, surround in double quotes
       let formattedValue = typeof newItem[key] == 'string' ? `\"${newItem[key]}\"` : newItem[key];
 
@@ -72,7 +70,7 @@ const cityCubeDb = (() => {
     }
     
     // used separately-formatted SQL statement here as opposed to 
-    // crating statement in 
+    // crating statement in .execute(...) call (crashed)
     let sqlStatement = `update menu_items ${updateStatements} where item_id = ${itemId}`;
 
     const wasSuccessful = await tursoCityCubeClient.execute(sqlStatement);
@@ -83,9 +81,11 @@ const cityCubeDb = (() => {
   const deleteMenuItem = async (id) => {
     // potential issue here with users passing in malicious code; refactor
     // sanitize data, since this could be user provided
-    await tursoCityCubeClient.execute(
-      `delete from menu_items where id = ${id};`,
-    );
+    const result = await tursoCityCubeClient.execute(
+      `delete from menu_items where item_id = ${id};`,
+    ).rowsAffected != 0;
+
+    return result;
   };
 
 
@@ -114,22 +114,23 @@ const cityCubeDb = (() => {
   }
 
   const getUser = async(email) => {
-    const user = await tursoCityCubeClient.execute(
-      `select email, type, user_id from users where email = ${email};`
-    );
+    const user = await tursoCityCubeClient.execute({
+      sql: `select email, type, user_id from users where email = ?;`,
+      args: `"${email}"`
+    });
 
     return user.rows[0];
   }
 
   const addUser = async (email, password, type) => {
-    const wasSuccessful = bcrypt.hash(password, 10, async(err, hashedPassword) => {
+    const wasSuccessful = await bcrypt.hash(password, 10, async (err, hashedPassword) => {
       if(err) {
         console.log('Error adding user: ', err);
         return err;
       }
 
       return await tursoCityCubeClient.execute(
-        `insert into users(email, type, password) values(${email}, ${password}, ${type});`
+        `insert into users(email, password, type, date_created) values("${email}", "${hashedPassword}", "${type}", date());`
       );
     });
 
