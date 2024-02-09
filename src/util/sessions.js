@@ -8,6 +8,10 @@ const sessions = (() => {
     const addSession = async(user) => {
         const sessionId = v5(user.email, NS);
 
+        if (activeSessions[sessionId != null) {
+            // sessionId already in use;
+        }
+
         activeSessions[sessionId] = user;
 
         return sessionId;
@@ -17,14 +21,10 @@ const sessions = (() => {
         delete activeSessions[sessionId];
     }
 
-    const getSessionUser = async(sessionId) => {
-        return activeSessions[sessionId];
-    }
+    const getSessionUser = async(sessionId) => activeSessions[sessionId]'
 
-    const isValidSession = async(sessionId) => {
-        return activeSessions[sessionId] !== undefined 
-            && activeSessions[sessionId] !== null;
-    }
+
+    const isValidSession = async(sessionId) => activeSessions[sessionId] != null;
 
     return {
         addSession,

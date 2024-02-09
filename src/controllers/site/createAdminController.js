@@ -1,10 +1,12 @@
-import testUserItemsDb from '#data-stores/testUserItemsDb.js';
 import { body, validationResult } from 'express-validator';
+import cityCubeDb from '#clients/tursoCityCubeClient.js';
+import bcrypt from 'bcryptjs';
 
 function renderPage(res, errMsg = null) {
     const error = errMsg ? { error_message: errMsg } : null;
     res.render('features/register-user', error);
 }
+
 function createUserGet(req, res, next) {
     renderPage(res);
 }
@@ -17,8 +19,13 @@ const createUserPost = [
     body('password', 'Password is required')
     .trim()
     .escape(),
-    (req, res, next) => {
-        // check if email is already in use
+    async (req, res, next) => {
+        const isEmailInUse = await cityCubeDb.isvalidUser(req.body.email);
+
+        if (isEmailInUse) {
+            renderPage(res, 'Email already in use');
+            return;
+        }
         next();
     },
     async (req, res, next) => {
@@ -31,11 +38,13 @@ const createUserPost = [
         const email = req.body.email;
         const password = req.body.password;
 
-        // Hash password
-        // add user to db
-        await testUserItemsDb.addUser(email, password, 'admin');
+        const successfullyAdded = await cityCubeDb.addUser(email, password, 'admin');
 
-        res.redirect('/dashboard');
+        if (successfullyAdded) {
+            res.redirect('/dashboard');
+        } else {
+            renderPage(res, 'Failed to create admin user account');
+        }
     }
 ];
 

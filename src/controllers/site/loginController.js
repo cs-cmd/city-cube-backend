@@ -1,6 +1,6 @@
 import { body, validationResult } from "express-validator";
-import testUserItemsDb from "#data-stores/testUserItemsDb.js";
 import sessions from "#util/sessions.js";
+import cityCubeDb from '#clients/tursoCityCubeClient.js';
 
 function loginGet(req, res) {
   res.render("login");
@@ -26,12 +26,16 @@ const loginPost = [
     // hash password here
     const password = req.body.password;
 
-    if (!(await testUserItemsDb.isUser(email))) {
-      req.body.error_message = "User does not exist.";
+    const isUser = await cityCubeDb.isValidUser(email);
+
+    if(!isUser) {
+      req.body.error_message = 'User does not exist';
       next();
     }
 
-    if(!(await testUserItemsDb.checkUserPassword(email, password))) {
+    const isCorrectPassword = await cityCubeDb.isCorrectPassword(email, password);
+
+    if(!isCorrectPassword) {
       req.body.error_message = 'Password is incorrect';
       next();
     }
@@ -40,12 +44,12 @@ const loginPost = [
   },
   async (req, res) => {
     const errorMessage = req.body.error_message;
-    if (errorMessage) {
+    if (errorMessage != null) {
       res.render("login", { error_message: errorMessage });
       return;
     }
 
-    const user = await testUserItemsDb.getUser(req.body.email);
+    const user = await cityCubeDb.getUser(req.body.email);
 
     const sessionId = await sessions.addSession(user);
 
