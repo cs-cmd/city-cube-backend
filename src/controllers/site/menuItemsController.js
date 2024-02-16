@@ -8,7 +8,7 @@ async function menuItemsGet(req, res) {
   });
 }
 
-await function menuItemsEditGet(req, res) {
+async function menuItemsEditGet(req, res) {
   const id = req.params.id;
 
   const editItem = await cityCubeDb.getItem(id);
@@ -92,7 +92,7 @@ function menuItemsAddGet(req, res) {
 const menuItemsAddPost = [
   body('name', 'The name of the item is required')
   .trim()
-  .length({min: 3})
+  .isLength({min: 3})
   .escape(),
   async (req, res) => {
     const sessionId = req.cookies['session-id'];

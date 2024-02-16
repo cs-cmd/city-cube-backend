@@ -8,7 +8,7 @@ const sessions = (() => {
     const addSession = async(user) => {
         const sessionId = v5(user.email, NS);
 
-        if (activeSessions[sessionId != null) {
+        if (activeSessions[sessionId] != null) {
             // sessionId already in use;
         }
 
@@ -21,7 +21,7 @@ const sessions = (() => {
         delete activeSessions[sessionId];
     }
 
-    const getSessionUser = async(sessionId) => activeSessions[sessionId]'
+    const getSessionUser = async(sessionId) => activeSessions[sessionId];
 
 
     const isValidSession = async(sessionId) => activeSessions[sessionId] != null;

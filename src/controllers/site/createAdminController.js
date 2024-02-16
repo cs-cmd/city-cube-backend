@@ -20,7 +20,7 @@ const createUserPost = [
     .trim()
     .escape(),
     async (req, res, next) => {
-        const isEmailInUse = await cityCubeDb.isvalidUser(req.body.email);
+        const isEmailInUse = await cityCubeDb.isValidUser(req.body.email);
 
         if (isEmailInUse) {
             renderPage(res, 'Email already in use');

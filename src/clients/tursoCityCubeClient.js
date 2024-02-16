@@ -130,18 +130,24 @@ const cityCubeDb = (() => {
   }
 
   const addUser = async (email, password, type) => {
-    const wasSuccessful = await bcrypt.hash(password, 10, async (err, hashedPassword) => {
-      if(err) {
-        console.log('Error adding user: ', err);
-        return err;
-      }
+    let wasSuccessful = false;
+    const hashedPassword = await bcrypt.hash(password, 10)
+    .then(res => res)
+    .catch(err => false);
 
-      return await tursoCityCubeClient.execute(
+    // hashing error encountered, return
+    if (hashedPassword == false) {
+      return false;
+    }
+
+
+    // use rowsAffected to determine if the insert operation was successful
+    // Probably a better way to handle this
+    const rowsAffected = (await tursoCityCubeClient.execute(
         `insert into users(email, password, type, date_created) values("${email}", "${hashedPassword}", "${type}", date());`
-      );
-    });
+    )).rowsAffected;
 
-    return wasSuccessful;
+    return rowsAffected >= 1;
   }
 
   return {

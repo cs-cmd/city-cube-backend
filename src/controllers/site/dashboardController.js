@@ -12,7 +12,6 @@ function checkIfSignedIn(req, res, next) {
 
 // gets basic user data
 function dashboardHomeGet(req, res) {
-  console.log(req.cookies['session-id']);
   res.render("dashboard");
 }
 
