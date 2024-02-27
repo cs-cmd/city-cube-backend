@@ -131,6 +131,7 @@ const cityCubeDb = (() => {
 
   // returns an object that contains a statusCode and either the error message or 
   // the userId and sessionId
+
   const userSignIn = async(email, password) => {
     // will escape data in future
     const queryResults = await tursoCityCubeClient
@@ -144,7 +145,7 @@ const cityCubeDb = (() => {
       };
     }
 
-    const passwordsMatch = await bcrypt.compare(queryResults.password, userPassword).then(res => res);
+    const passwordsMatch = await bcrypt.compare(password, queryResults.password).then(res => res);
 
     if(!passwordsMatch) {
       return {
@@ -161,7 +162,6 @@ const cityCubeDb = (() => {
       userId: queryResults.user_id,
       sessionId,
     }
-
   }
 
   const addUser = async (email, password, type) => {
@@ -194,7 +194,8 @@ const cityCubeDb = (() => {
     isValidUser, 
     isCorrectPassword,
     getUser,
-    addUser
+    addUser,
+    userSignIn
   };
 })();
 
