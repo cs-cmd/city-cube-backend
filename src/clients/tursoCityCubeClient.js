@@ -129,6 +129,41 @@ const cityCubeDb = (() => {
     return user.rows[0] || null;
   }
 
+  // returns an object that contains a statusCode and either the error message or 
+  // the userId and sessionId
+  const userSignIn = async(email, password) => {
+    // will escape data in future
+    const queryResults = await tursoCityCubeClient
+                              .execute('select password, user_id from users where email=?', email)
+                              .rows[0];
+
+    if(!queryResults) {
+      return {
+        statusCode: 401,
+        msg: "User not found"
+      };
+    }
+
+    const passwordsMatch = await bcrypt.compare(queryResults.password, userPassword).then(res => res);
+
+    if(!passwordsMatch) {
+      return {
+        statusCode: 401,
+        msg: "Incorrect password"
+      };
+    }
+
+    // create and insert sessionId
+    let sessionId = 'TEST';
+    // insert into sessions value (sessionId, email);
+    return {
+      statusCode: 200,
+      userId: queryResults.user_id,
+      sessionId,
+    }
+
+  }
+
   const addUser = async (email, password, type) => {
     let wasSuccessful = false;
     const hashedPassword = await bcrypt.hash(password, 10)
