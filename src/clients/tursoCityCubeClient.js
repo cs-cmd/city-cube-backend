@@ -155,7 +155,10 @@ const cityCubeDb = (() => {
 
     // will escape data in future
     const queryResults = await tursoCityCubeClient
-                              .execute('select password, user_id from users where email=?', email)
+                              .execute({
+                                sql: 'select password, user_id from users where email = ?', 
+                                args: [email]
+                              })
                               .rows[0];
 
     if(!queryResults) {
@@ -207,6 +210,15 @@ const cityCubeDb = (() => {
     return rowsAffected >= 1;
   }
 
+  const updateLastLoginDate = async(rawId) => {
+    const id = sanitize(rawId);
+
+    tursoCityCubeClient.execute({
+      sql: 'update users set last_successful_login = date() where user_id = ?', 
+      args: [id]}
+    );
+  }
+
   return {
     getAllMenuItems,
     getMenuItem,
@@ -217,7 +229,8 @@ const cityCubeDb = (() => {
     isCorrectPassword,
     getUser,
     addUser,
-    userSignIn
+    userSignIn,
+    updateLastLoginDate
   };
 })();
 

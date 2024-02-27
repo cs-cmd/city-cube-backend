@@ -1,7 +1,7 @@
-import testMenuItemsDb from '#data-stores/testMenuItemsDb.js';
+import cityCubeDb from '#clients/tursoCityCubeClient.js';
 
 const apiMenuItemsGet = async (req, res) => {
-    const menuItems = await testMenuItemsDb.getItems();
+    const menuItems = await cityCubeDb.getAllMenuItems();
 
     res.json(menuItems);
 }

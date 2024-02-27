@@ -30,7 +30,7 @@ const createUserPost = [
             errorMessage = 'Email is already in use';
         }
 
-        if(!errorMessage) {
+        if(errorMessage) {
             renderPage(res, errorMessage);
             return;
         }

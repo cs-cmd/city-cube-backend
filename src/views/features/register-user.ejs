@@ -9,44 +9,45 @@
 <body>
     <%- include('../components/header'); %>
     <main class="main-section">
-    <h3>Create new Admin User</h3>
-    <form id="create-user-form" class="form">
-        <section class="input-field">
-            <label for="email">Email</label>
-            <input type="email"
-            required
-            name="email"
-            class="form-input"/>
-        </section>
+        <h3>Create new Admin User</h3>
+        <form id="create-user-form" class="form">
+            <section class="input-field">
+                <label for="email">Email</label>
+                <input type="email"
+                required
+                name="email"
+                class="form-input"/>
+            </section>
 
-        <section class="input-field">
-            <label for="password">Password</label>
-            <input type="password"
-            required
-            name="password"
-            class="form-input"
-            id="password"/>
-        </section>
+            <section class="input-field">
+                <label for="password">Password</label>
+                <input type="password"
+                required
+                name="password"
+                class="form-input"
+                id="password"/>
+            </section>
 
-        <section class="input-field">
-            <label for="conf_password">
-                Confirm Password
-            </label>
-            <input type="password"
-            required
-            name="conf_password"
-            class="form-input"
-            id="conf-password"/>
-        </section>
+            <section class="input-field">
+                <label for="conf_password">
+                    Confirm Password
+                </label>
+                <input type="password"
+                required
+                name="conf_password"
+                class="form-input"
+                id="conf-password"/>
+            </section>
 
-        <input type="submit" 
-        value="Register"
-        class="page-button regular"
-        formmethod="POST"/>
-    </form>
-    <% if(locals.error_message) { %>
-        <p class="warning-text" id="form-error"><%= locals.error_message %></p>
-    <% } // if error_message is present %>
+            <input type="submit" 
+            value="Register"
+            class="page-button regular"
+            formmethod="POST"/>
+            <a class="page-button regular secondary" href="/dashboard">Cancel</a>
+        </form>
+        <% if(locals.error_message) { %>
+            <p class="warning-text" id="form-error"><%= locals.error_message %></p>
+        <% } // if error_message is present %>
     </main>
 
     <script>

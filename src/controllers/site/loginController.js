@@ -38,6 +38,7 @@ const loginPost = [
 
     const sessionId = await sessions.addSession(user);
 
+    cityCubeDb.updateLastLoginDate(user.user_id);
     res.cookie('session-id', sessionId);
     res.redirect('/dashboard');
   },

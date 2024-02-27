@@ -1,5 +1,5 @@
 import cityCubeDb from "#clients/tursoCityCubeClient.js";
-import { body, validationResult } from 'express-validator';
+import { sanitize } from '#util/sanitization.js';
 
 async function menuItemsGet(req, res) {
   const menuItems = await cityCubeDb.getAllMenuItems();
@@ -11,7 +11,12 @@ async function menuItemsGet(req, res) {
 async function menuItemsEditGet(req, res) {
   const id = req.params.id;
 
-  const editItem = await cityCubeDb.getItem(id);
+  if(isNaN(id)) {
+    res.render('features/menu-items', { error_message: 'Invalid Item ID'});
+    return;
+  }
+
+  const editItem = await cityCubeDb.getMenuItem(id);
 
   res.render("features/add-edit-menu-item", {
     edit_item: editItem,
@@ -22,6 +27,15 @@ async function menuItemsEditGet(req, res) {
 
 const menuItemsEditPost = [
   async (req, res) => {
+    const id = req.params.id;
+
+    if(isNaN(id)) {
+      res.render('features/add-edit-menu-item', {
+        error_message: 'Invalid Item ID',
+      });
+      return;
+    }
+
     const editedItem = {
       name: req.body.item_name,
       price: req.body.price,
@@ -29,7 +43,7 @@ const menuItemsEditPost = [
       amount_in_stock: req.body.amount_in_stock,
     };
 
-    await cityCubeDb.updateMenuItem(req.params.id, editedItem);
+    await cityCubeDb.updateMenuItem(id, editedItem);
 
     res.redirect("/dashboard/menu-items");
   },
@@ -37,6 +51,14 @@ const menuItemsEditPost = [
 
 async function menuItemsDeleteGet(req, res) {
   const id = req.params.id;
+
+  if(isNaN(id)) {
+    res.render('features/menu-items', {
+      error_message: 'Invalid Item ID'
+    });
+    return;
+  }
+
   const deleteItem = await cityCubeDb.getMenuItem(id);
   if (deleteItem == null) {
     console.log("Invalid menu item");
@@ -55,7 +77,8 @@ const menuItemsDeletePost = [
 
     if (sessionId == null) {
       req.body.error_message = "Invalid user session";
-      next();
+    } else if (isNaN(req.params.id)) {
+      req.body.error_message = "Invalid Item ID";
     }
 
     next();
@@ -64,8 +87,8 @@ const menuItemsDeletePost = [
     const id = req.params.id;
     const errorMessage = req.body.error_message;
 
-    if (errorMessage != null) {
-      const deleteItem = await cityCubeDb.getMenuItem(id);
+    if (errorMessage != null && isNaN(id)) {
+      let deleteItem = isNaN(id) ? await cityCubeDb.getMenuItem(id) : null;
       res.render("features/delete-menu-item", {
         error_message: errorMessage,
         candidate_delete_item: deleteItem,
@@ -73,7 +96,7 @@ const menuItemsDeletePost = [
       return;
     }
 
-    const wasDelete = await cityCube.deleteMenuItem(id);
+    const wasDeleted = await cityCube.deleteMenuItem(id);
     if (!wasDeleted) {
       console.log("Error deleting item");
     }
@@ -104,8 +127,9 @@ const menuItemsAddPost = [
 
     if (sessionId == null) {
       errorMessage = 'Invalid user session';
-    } else if (validationErrors != null) {
-      errorMessage = validationErrors[0];
+    } else if (!newItem.name || !newItem.price
+              || newItem.description || newItem.amount_in_stock) {
+      errorMessage = 'Enter all fields required';
     }
 
     if (errorMessage != null) {

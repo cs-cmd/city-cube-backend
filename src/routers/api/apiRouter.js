@@ -1,10 +1,10 @@
 import menuItemsApiRouter from "./menuItemsApiRouter.js";
-import loginRouter from "./loginRouter.js";
+import accountRouter from "./accountRouter.js";
 import express from 'express';
 
 const apiRouter = express.Router();
 
 apiRouter.use('/menu-items', menuItemsApiRouter);
-apiRouter.use('/account/login', loginRouter);
+apiRouter.use('/account', accountRouter);
 
 export default apiRouter;

@@ -14,7 +14,7 @@ config();
 
 const allowList = ['http://localhost:5173'];
 const corsOptions = {
-  origin: 'http://localhost:5173',
+  origin: 'https://localhost:5173',
   optionsSuccessStatus: 200
 };
 
