@@ -1,8 +1,10 @@
-import cityCubeDb from '#clients/tursoCityCubeClient';
+import cityCubeDb from '#clients/tursoCityCubeClient.js';
+import { sanitize } from '#util/sanitization.js';
 
-const signUserIn = async(req, res, next) => {
-    const email = req.body.email;
-    const password = req.body.password;
+const signUserIn = 
+async(req, res, next) => {
+    const email = sanitize(req.body.email);
+    const password = sanitize(req.body.password);
 
     if(!email || !password) {
         res.status(400);
@@ -26,3 +28,5 @@ const signUserIn = async(req, res, next) => {
         });
     }
 }
+
+export { signUserIn };

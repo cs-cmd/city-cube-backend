@@ -2,6 +2,7 @@ import { createClient } from "@libsql/client";
 import { config } from 'dotenv';
 config();
 import bcrypt from 'bcryptjs';
+import { sanitize } from '#util/sanitization.js';
 
 const cityCubeDb = (() => {
   const tursoCityCubeClient = createClient({
@@ -17,7 +18,8 @@ const cityCubeDb = (() => {
     return menuItems.rows;
   };
 
-  const getMenuItem = async (id) => {
+  const getMenuItem = async (rawId) => {
+    const id = sanitize(rawId);
     // sanitize input here
     const menuItem = await tursoCityCubeClient.execute({
       sql: `select * from menu_items where item_id = ?;`,
@@ -28,6 +30,18 @@ const cityCubeDb = (() => {
   };
 
   const addMenuItem = async (newItem) => {
+    const sanitizationKeys = ['name', 'price', 'description', 'amount_in_stock'];
+
+    for(let i = 0; i < sanitizationKeys.length; i += 1) {
+      const value = newItem[sanitizationKeys[i]];
+      
+      if(typeof(value) !== 'string') {
+        continue;
+      }
+
+      newItem[sanitizationKeys[i]] = sanitize(value);       
+    }
+
     const wasSuccessful = await tursoCityCubeClient.execute({
       sql: `insert into menu_items(name, price, description, amount_in_stock) values(?, ?, ?, ?);`,
       args: [newItem.name, newItem.price, newItem.description, newItem.amount_in_stock]
@@ -37,7 +51,6 @@ const cityCubeDb = (() => {
   };
 
   const updateMenuItem = async (itemId, newItem) => {
-
     const menuItemUpdateFields = [
       'name',
       'price',
@@ -61,7 +74,7 @@ const cityCubeDb = (() => {
       }
 
       // if item is a string, surround in double quotes
-      let formattedValue = typeof newItem[key] == 'string' ? `\"${newItem[key]}\"` : newItem[key];
+      let formattedValue = typeof newItem[key] == 'string' ? `\"${sanitize(newItem[key])}\"` : newItem[key];
 
     // if update statements has no values to set, prefix with 'set', otherwise prefix with a comma to separate updates
       let prefix = updateStatements == '' ? 'set' : ',';
@@ -78,9 +91,8 @@ const cityCubeDb = (() => {
     return wasSuccessful != undefined && wasSuccessful != 0;
   }
 
-  const deleteMenuItem = async (id) => {
-    // potential issue here with users passing in malicious code; refactor
-    // sanitize data, since this could be user provided
+  const deleteMenuItem = async (rawId) => {
+    const id = sanitize(rawId);
     const result = await tursoCityCubeClient.execute(
       `delete from menu_items where item_id = ${id};`,
     ).rowsAffected != 0;
@@ -89,7 +101,9 @@ const cityCubeDb = (() => {
   };
 
 
-  const isValidUser = async (email) => {
+  const isValidUser = async (rawEmail) => {
+    const email = sanitize(rawEmail);
+
     const userInstance = await tursoCityCubeClient.execute(
       `select 'Y' from users where email = "${email}";`
     );
@@ -97,14 +111,15 @@ const cityCubeDb = (() => {
     return userInstance.rows[0] != null && userInstance.rows[0] != undefined;
   }
 
-  const isCorrectPassword = async (email, password) => {
+  const isCorrectPassword = async (rawEmail, rawPassword) => {
+    const email = sanitize(rawEmail);
+    const password = sanitize(rawPassword);
+
     const isUser = await isValidUser(email);
 
     if(!isUser) {
       return false;
     }
-
-    let isPasswordCorrect = false;
 
     const storedPasswordRow = (await tursoCityCubeClient.execute(
       `select password from users where email = "${email}";`
@@ -123,7 +138,9 @@ const cityCubeDb = (() => {
     return await bcrypt.compare(password, storedPassword).then(res => res);
   }
 
-  const getUser = async(email) => {
+  const getUser = async(rawEmail) => {
+    const email = sanitize(rawEmail);
+
     const user = await tursoCityCubeClient.execute(`select email, type, user_id from users where email = "${email}";`);
 
     return user.rows[0] || null;
@@ -132,7 +149,10 @@ const cityCubeDb = (() => {
   // returns an object that contains a statusCode and either the error message or 
   // the userId and sessionId
 
-  const userSignIn = async(email, password) => {
+  const userSignIn = async(rawEmail, rawPassword) => {
+    const email = sanitize(rawEmail);
+    const password = sanitize(rawPassword);
+
     // will escape data in future
     const queryResults = await tursoCityCubeClient
                               .execute('select password, user_id from users where email=?', email)
@@ -164,17 +184,19 @@ const cityCubeDb = (() => {
     }
   }
 
-  const addUser = async (email, password, type) => {
-    let wasSuccessful = false;
+  const addUser = async (rawEmail, rawPassword, rawType) => {
+    const email = sanitize(rawEmail);
+    const password = sanitize(rawPassword);
+    const type = sanitize(rawType);
+
     const hashedPassword = await bcrypt.hash(password, 10)
     .then(res => res)
-    .catch(err => false);
+    .catch(err => null);
 
     // hashing error encountered, return
-    if (hashedPassword == false) {
+    if (!hashedPassword) {
       return false;
     }
-
 
     // use rowsAffected to determine if the insert operation was successful
     // Probably a better way to handle this

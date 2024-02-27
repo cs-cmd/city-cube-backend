@@ -12,29 +12,32 @@ function createUserGet(req, res, next) {
 }
 
 const createUserPost = [
-    body('email', 'Email is required')
-    .trim()
-    .isEmail()
-    .escape(),
-    body('password', 'Password is required')
-    .trim()
-    .escape(),
     async (req, res, next) => {
+        const email = req.body.email;
+        const password = req.body.password;
+
+        let errorMessage = '';
+
+        if(!email) {
+            errorMessage = 'Email is required';
+        } else if (!password) {
+            errorMessage = 'Password is required';
+        }
+
         const isEmailInUse = await cityCubeDb.isValidUser(req.body.email);
 
         if (isEmailInUse) {
-            renderPage(res, 'Email already in use');
-            return;
+            errorMessage = 'Email is already in use';
         }
-        next();
-    },
-    async (req, res, next) => {
-        const errorMessage = req.body.error_message;
-        if(errorMessage) {
+
+        if(!errorMessage) {
             renderPage(res, errorMessage);
             return;
         }
 
+        next();
+    },
+    async (req, res, next) => {
         const email = req.body.email;
         const password = req.body.password;
 

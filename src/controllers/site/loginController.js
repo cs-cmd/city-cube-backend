@@ -7,23 +7,8 @@ function loginGet(req, res) {
 }
 
 const loginPost = [
-  body('email', 'Email is required')
-  .trim()
-  .isEmail()
-  .escape(),
-  body('password', 'Password is required')
-  .trim()
-  .escape(),
   async (req, res, next) => {
-    const result = validationResult(req);
-
-    if(!result.isEmpty()) {
-      req.body.error_message = result.array[0];
-      next();
-    }
-
     const email = req.body.email;
-    // hash password here
     const password = req.body.password;
 
     const isUser = await cityCubeDb.isValidUser(email);

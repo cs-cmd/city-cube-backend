@@ -90,14 +90,9 @@ function menuItemsAddGet(req, res) {
 
 // TODO - Finish validation chain
 const menuItemsAddPost = [
-  body('name', 'The name of the item is required')
-  .trim()
-  .isLength({min: 3})
-  .escape(),
   async (req, res) => {
     const sessionId = req.cookies['session-id'];
-    const validationErrors = validationResult(res);
-
+   
     let errorMessage = '';
 
     const newItem = {
