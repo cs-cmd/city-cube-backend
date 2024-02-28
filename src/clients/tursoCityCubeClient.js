@@ -3,8 +3,12 @@ import { config } from 'dotenv';
 config();
 import bcrypt from 'bcryptjs';
 import { sanitize } from '#util/sanitization.js';
+import { v5 } from 'uuid';
+
+const NS = '9554bd05-6417-431e-a8f8-7b2ed6c69898';
 
 const cityCubeDb = (() => {
+
   const tursoCityCubeClient = createClient({
     url: process.env.LIBSQL_CONN,
     authToken: process.env.TURSO_DB_API_TOKEN,
@@ -219,6 +223,53 @@ const cityCubeDb = (() => {
     );
   }
 
+  const createSession = async(rawUserId) => {
+    const userId = sanitize(rawUserId);
+    
+    const sessionId = v5(userId, NS);
+
+    const result = await tursoCityCubeClient.execute({
+      sql: 'insert into sessions(session_id, user_id, date_created) values(?, ?, date());',
+      args: [sessionId, userId]
+    });
+
+    return sessionId;
+  }
+
+  const removeSession = async (sessionId) => {
+    if(!sessionId) {
+      return false;
+    }
+
+    const result = await tursoCityCubeClient.execute({
+      sql: 'delete from sessions where session_id = ?;',
+      args: [sessionId]
+    });
+
+    return result.rowsAffected > 0;
+  }
+
+  const getUserSession = async(sessionId) => {
+    if(!sessionId) {
+      return null;
+    }
+    const result = await tursoCityCubeClient.execute({
+      sql: 'select user_id from sessions where session_id = ?',
+      args: [sessionId]
+    });
+
+    return result.rows[0].user_id || null;
+  }
+
+  const isValidSession = async(sessionId) => {
+    if(!sessionId) {
+      return false;
+    }
+    const user_id = await getUserSession(sessionId);
+
+    return user_id !== null;
+  }
+
   return {
     getAllMenuItems,
     getMenuItem,
@@ -230,7 +281,11 @@ const cityCubeDb = (() => {
     getUser,
     addUser,
     userSignIn,
-    updateLastLoginDate
+    updateLastLoginDate,
+    createSession,
+    removeSession,
+    getUserSession,
+    isValidSession,
   };
 })();
 

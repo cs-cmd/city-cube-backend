@@ -29,11 +29,14 @@ html {
   background-color: var(--main-background);
   color: var(--text-color);
   overflow-x: hidden;
+  display: flex;
+  justify-content: center;
 }
 
 body {
   margin: 0px;
   padding: 0px;
+  width: min(75%, 1200px);
 }
 
 .heading {

@@ -1,9 +1,12 @@
 import sessions from '#util/sessions.js';
+import cityCubeDb from '#clients/tursoCityCubeClient.js';
 
-function checkIfSignedIn(req, res, next) {
+async function checkIfSignedIn(req, res, next) {
   const sessionId = req.cookies['session-id'];
 
-  if(!sessions.isValidSession(sessionId)) {
+  const isValidSession = await cityCubeDb.isValidSession(sessionId);
+  
+  if(!isValidSession) {
     res.redirect('/login');
   } else {
     next();

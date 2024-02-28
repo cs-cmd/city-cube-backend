@@ -36,7 +36,7 @@ const loginPost = [
 
     const user = await cityCubeDb.getUser(req.body.email);
 
-    const sessionId = await sessions.addSession(user);
+    const sessionId = await cityCubeDb.createSession(user.user_id);
 
     cityCubeDb.updateLastLoginDate(user.user_id);
     res.cookie('session-id', sessionId);
